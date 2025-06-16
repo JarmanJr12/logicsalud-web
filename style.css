@@ -1,59 +1,439 @@
+/* Estilos Generales */
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #e3f7f6;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e3f7f6 100%);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 .container {
   max-width: 700px;
-  margin: 40px auto;
+  margin: 30px auto;
   background: white;
   padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(46, 125, 123, 0.1);
+  position: relative;
+  transition: all 0.5s ease;
 }
 
-h1, h3 {
+.logo {
   text-align: center;
-  color: #2e7d7b;
+  margin-bottom: 20px;
 }
 
-p, li {
-  color: #444;
-  font-size: 15px;
+.logo .icon {
+  font-size: 50px;
+  display: block;
+}
+
+.logo h1 {
+  color: #2e7d7b;
+  margin: 10px 0;
+  font-size: 2.5em;
+}
+
+.subtitle {
+  text-align: center;
+  color: #555;
+  font-size: 1.1em;
+  margin-bottom: 30px;
+}
+
+/* Botones Mejorados */
+.btn, button {
+  display: inline-block;
+  padding: 15px 25px;
+  background: linear-gradient(90deg, #2e7d7b 0%, #3aa39f 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  margin: 10px 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 125, 123, 0.3);
+}
+
+.btn:hover, button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(46, 125, 123, 0.4);
+}
+
+.btn:active, button:active {
+  transform: translateY(1px);
+}
+
+/* Inputs Modernos */
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2e7d7b;
+  font-weight: 500;
+}
+
+.input-group label i {
+  margin-right: 8px;
+  width: 20px;
+  text-align: center;
 }
 
 input, textarea {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s;
+  background-color: #f8fdfd;
 }
 
-button, .btn {
-  display: inline-block;
-  padding: 12px;
-  background: #2e7d7b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  margin-top: 15px;
-  font-size: 15px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
+input:focus, textarea:focus {
+  border-color: #2e7d7b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 125, 123, 0.2);
+  background-color: white;
 }
 
-button:hover, .btn:hover {
-  background: #236d6b;
+/* Resultados */
+.result-container {
+  margin-top: 30px;
 }
 
 .result-box {
-  margin-top: 25px;
-  background: #f0fdfa;
-  padding: 20px;
+  background: #f8fdfd;
+  padding: 25px;
+  border-radius: 15px;
   border-left: 5px solid #2e7d7b;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(46, 125, 123, 0.05) 0%, rgba(58, 163, 159, 0.05) 100%);
+  z-index: 0;
+}
+
+.result-box > * {
+  position: relative;
+  z-index: 1;
+}
+
+.risk-meter {
+  background: #eee;
+  height: 25px;
+  border-radius: 12px;
+  margin: 15px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.risk-meter::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, 
+    rgba(255,255,255,0.1) 0%, 
+    rgba(255,255,255,0.3) 50%, 
+    rgba(255,255,255,0.1) 100%);
+  animation: shine 2s infinite;
+}
+
+.risk-level {
+  height: 100%;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: width 1s ease;
+}
+
+.risk-level.physical {
+  background: linear-gradient(90deg, #4ecdc4 0%, #88d8c0 100%);
+}
+
+.analysis-list {
+  padding-left: 20px;
+}
+
+.analysis-list li {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 3px solid #2e7d7b;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Botón de evaluación */
+.btn-evaluate {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  background: linear-gradient(90deg, #2e7d7b 0%, #3aa39f 100%);
+  color: white;
+  border: none;
   border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: fadeInUp 0.5s ease 0.4s forwards; 
+  opacity: 0;
+}
+
+.btn-evaluate:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(46, 125, 123, 0.2);
+}
+
+.btn-evaluate:active {
+  transform: translateY(1px);
+}
+
+/* Animaciones de carga */
+.loading-animation {
+  text-align: center;
+  padding: 30px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e0e0e0;
+  border-top: 5px solid #2e7d7b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Retrasos para cada input */
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.2s; }
+.input-group:nth-child(3) { animation-delay: 0.3s; }
+
+/* Chatbot */
+.chatbot-icon {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #2e7d7b;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: all 0.3s;
+}
+
+.chatbot-icon:hover {
+  transform: scale(1.1);
+}
+
+.chatbot-container {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 350px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.chatbot-container.active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.chatbot-header {
+  background: linear-gradient(90deg, #2e7d7b 0%, #3aa39f 100%);
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.chatbot-header span {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.chatbot-messages {
+  height: 300px;
+  padding: 15px;
+  overflow-y: auto;
+  background: #f9f9f9;
+}
+
+.message-container {
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.message-container.user {
+  justify-content: flex-end;
+}
+
+.message-container.bot {
+  justify-content: flex-start;
+}
+
+.msg-content {
+  padding: 10px 15px;
+  border-radius: 18px;
+}
+
+.user-msg .msg-content {
+  background: #e3f7f6;
+  border-bottom-right-radius: 5px;
+}
+
+.bot-msg .msg-content {
+  background: white;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.msg-time {
+  font-size: 10px;
+  color: #888;
+  margin-top: 3px;
+  text-align: right;
+}
+
+.typing-indicator {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.typing-dots span {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+/* Animaciones */
+.animate__animated {
+  animation-duration: 1s;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .chatbot-container {
+    width: 90%;
+    right: 5%;
+  }
 }

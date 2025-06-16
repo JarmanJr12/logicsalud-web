@@ -2,87 +2,53 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>LOGICSALUD – Evaluación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOGICSALUD – Evaluación Avanzada</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
+  <meta name="description" content="Evaluación inteligente de bienestar emocional y físico">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
-  <h1>📋 Evaluación LOGICSALUD</h1>
-  <input type="text" id="nombre" placeholder="🧑 Tu nombre completo">
-  <input type="text" id="codigo" placeholder="🔐 Código personal">
-  <textarea id="descripcion" rows="5" placeholder="✍️ Describe cómo te sientes..."></textarea>
-  <button onclick="evaluar()">📊 Evaluar y Generar Informe</button>
+  <div class="logo">
+    <span class="icon">🧠</span>
+    <h1>LOGICSALUD</h1>
+  </div>
 
-  <div id="resultado"></div>
-  <a href="index.html" class="btn volver">⬅ Volver al inicio</a>
+  <h2>📋 Evaluación de Bienestar</h2>
+
+  <button class="btn volver" onclick="cargarUltimaEvaluacion()">
+    <i class="fas fa-history"></i> Cargar Evaluación Anterior
+  </button>
+
+  <div class="input-group">
+    <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+    <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+  </div>
+
+  <div class="input-group">
+    <label for="codigo"><i class="fas fa-lock"></i> Código Personal</label>
+    <input type="text" id="codigo" placeholder="Ej: ABC123" required>
+  </div>
+
+  <div class="input-group">
+    <label for="descripcion"><i class="fas fa-comment-dots"></i> ¿Cómo te sientes hoy?</label>
+    <textarea id="descripcion" rows="5" placeholder="Describe tus síntomas, emociones..."></textarea>
+  </div>
+
+  <button class="btn-evaluate" onclick="evaluar()">
+    <i class="fas fa-chart-bar"></i> Evaluar y Generar Informe
+  </button>
+
+  <div id="resultado" class="result-container"></div>
+
+  <a href="index.html" class="btn volver">
+    <i class="fas fa-arrow-left"></i> Volver al Inicio
+  </a>
 </div>
-
-<script>
-  function evaluar() {
-    const nombre = document.getElementById("nombre").value.trim();
-    const codigo = document.getElementById("codigo").value.trim();
-    const descripcion = document.getElementById("descripcion").value.trim();
-    const resultadoDiv = document.getElementById("resultado");
-    resultadoDiv.innerHTML = "";
-
-    if (!nombre || !codigo || !descripcion) {
-      alert("Por favor completa todos los campos.");
-      return;
-    }
-
-    let riesgoMental = 0, riesgoFisico = 0, analisis = [];
-    const desc = descripcion.toLowerCase();
-
-    if (desc.includes("triste") || desc.includes("depresión") || desc.includes("sin ganas"))
-      { riesgoMental += 2; analisis.push("Posibles signos de depresión leve."); }
-    if (desc.includes("ansioso") || desc.includes("ansiedad"))
-      { riesgoMental += 1; analisis.push("Síntomas de ansiedad detectados."); }
-    if (desc.includes("me duele") || desc.includes("dolor"))
-      { riesgoFisico += 1; analisis.push("Dolor físico identificado."); }
-    if (desc.includes("fiebre") || desc.includes("calor"))
-      { riesgoFisico += 1; analisis.push("Fiebre presente, posible cuadro viral."); }
-    if (desc.includes("vomito") || desc.includes("náusea"))
-      { riesgoFisico += 1; analisis.push("Síntomas digestivos detectados."); }
-
-    resultadoDiv.innerHTML += `
-      <div class="result-box">
-        <h3>🧾 Informe Generado</h3>
-        <p><strong>🧠 Riesgo Mental:</strong> ${riesgoMental}</p>
-        <p><strong>🩺 Riesgo Físico:</strong> ${riesgoFisico}</p>
-        <ul>${analisis.map(a => `<li>${a}</li>`).join("")}</ul>
-        <button onclick="generarPDF('${nombre}', '${codigo}', \`${descripcion}\`, ${riesgoMental}, ${riesgoFisico}, ${JSON.stringify(analisis)})">📥 Descargar PDF</button>
-        <button onclick="location.reload()">🔄 Volver a Empezar</button>
-      </div>`;
-  }
-
-  function generarPDF(nombre, codigo, descripcion, riesgoMental, riesgoFisico, analisis) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("LOGICSALUD - Informe de Evaluación", 105, 15, null, null, "center");
-
-    doc.setFontSize(12);
-    doc.setFont("Helvetica", "normal");
-    doc.text(`Nombre: ${nombre}`, 10, 30);
-    doc.text(`Código: ${codigo}`, 10, 40);
-    doc.text(`Fecha: ${new Date().toLocaleString()}`, 10, 50);
-    doc.text("Descripción del usuario:", 10, 65);
-    doc.setFontSize(11);
-    doc.text(doc.splitTextToSize(descripcion, 180), 10, 75);
-
-    let y = 100 + (doc.splitTextToSize(descripcion, 180).length * 5);
-    doc.setFontSize(12);
-    doc.setFont("Helvetica", "bold");
-    doc.text("Análisis automático:", 10, y);
-    y += 10;
-    doc.setFont("Helvetica", "normal");
-    analisis.forEach(a => { doc.text(`- ${a}`, 10, y); y += 10; });
-    doc.text(`Riesgo Mental: ${riesgoMental}`, 10, y + 10);
-    doc.text(`Riesgo Físico: ${riscoFisico}`, 10, y + 20);
-    doc.save(`LOGICSALUD_${codigo}.pdf`);
-  }
-</script>
+<script src="script.js"></script>
 </body>
 </html>

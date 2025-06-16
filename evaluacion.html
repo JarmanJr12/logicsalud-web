@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>LOGICSALUD – Evaluación</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>📋 Evaluación LOGICSALUD</h1>
+  <input type="text" id="nombre" placeholder="🧑 Tu nombre completo">
+  <input type="text" id="codigo" placeholder="🔐 Código personal">
+  <textarea id="descripcion" rows="5" placeholder="✍️ Describe cómo te sientes..."></textarea>
+  <button onclick="evaluar()">📊 Evaluar y Generar Informe</button>
+
+  <div id="resultado"></div>
+  <a href="index.html" class="btn volver">⬅ Volver al inicio</a>
+</div>
+
+<script>
+  function evaluar() {
+    const nombre = document.getElementById("nombre").value.trim();
+    const codigo = document.getElementById("codigo").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const resultadoDiv = document.getElementById("resultado");
+    resultadoDiv.innerHTML = "";
+
+    if (!nombre || !codigo || !descripcion) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    let riesgoMental = 0, riesgoFisico = 0, analisis = [];
+    const desc = descripcion.toLowerCase();
+
+    if (desc.includes("triste") || desc.includes("depresión") || desc.includes("sin ganas"))
+      { riesgoMental += 2; analisis.push("Posibles signos de depresión leve."); }
+    if (desc.includes("ansioso") || desc.includes("ansiedad"))
+      { riesgoMental += 1; analisis.push("Síntomas de ansiedad detectados."); }
+    if (desc.includes("me duele") || desc.includes("dolor"))
+      { riesgoFisico += 1; analisis.push("Dolor físico identificado."); }
+    if (desc.includes("fiebre") || desc.includes("calor"))
+      { riesgoFisico += 1; analisis.push("Fiebre presente, posible cuadro viral."); }
+    if (desc.includes("vomito") || desc.includes("náusea"))
+      { riesgoFisico += 1; analisis.push("Síntomas digestivos detectados."); }
+
+    resultadoDiv.innerHTML += `
+      <div class="result-box">
+        <h3>🧾 Informe Generado</h3>
+        <p><strong>🧠 Riesgo Mental:</strong> ${riesgoMental}</p>
+        <p><strong>🩺 Riesgo Físico:</strong> ${riesgoFisico}</p>
+        <ul>${analisis.map(a => `<li>${a}</li>`).join("")}</ul>
+        <button onclick="generarPDF('${nombre}', '${codigo}', \`${descripcion}\`, ${riesgoMental}, ${riesgoFisico}, ${JSON.stringify(analisis)})">📥 Descargar PDF</button>
+        <button onclick="location.reload()">🔄 Volver a Empezar</button>
+      </div>`;
+  }
+
+  function generarPDF(nombre, codigo, descripcion, riesgoMental, riesgoFisico, analisis) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("LOGICSALUD - Informe de Evaluación", 105, 15, null, null, "center");
+
+    doc.setFontSize(12);
+    doc.setFont("Helvetica", "normal");
+    doc.text(`Nombre: ${nombre}`, 10, 30);
+    doc.text(`Código: ${codigo}`, 10, 40);
+    doc.text(`Fecha: ${new Date().toLocaleString()}`, 10, 50);
+    doc.text("Descripción del usuario:", 10, 65);
+    doc.setFontSize(11);
+    doc.text(doc.splitTextToSize(descripcion, 180), 10, 75);
+
+    let y = 100 + (doc.splitTextToSize(descripcion, 180).length * 5);
+    doc.setFontSize(12);
+    doc.setFont("Helvetica", "bold");
+    doc.text("Análisis automático:", 10, y);
+    y += 10;
+    doc.setFont("Helvetica", "normal");
+    analisis.forEach(a => { doc.text(`- ${a}`, 10, y); y += 10; });
+    doc.text(`Riesgo Mental: ${riesgoMental}`, 10, y + 10);
+    doc.text(`Riesgo Físico: ${riscoFisico}`, 10, y + 20);
+    doc.save(`LOGICSALUD_${codigo}.pdf`);
+  }
+</script>
+</body>
+</html>

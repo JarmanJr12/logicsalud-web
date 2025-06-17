@@ -4,51 +4,76 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LOGICSALUD – Evaluación Avanzada</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
-  <meta name="description" content="Evaluación inteligente de bienestar emocional y físico">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3870/3870822.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-<div class="container">
-  <div class="logo">
-    <span class="icon">🧠</span>
-    <h1>LOGICSALUD</h1>
+  <div class="container">
+    <div class="logo">
+      <span class="icon">🧠</span>
+      <h1>LOGICSALUD</h1>
+    </div>
+
+    <h2>📋 Evaluación de Bienestar</h2>
+
+    <button class="btn volver" onclick="cargarUltimaEvaluacion()">
+      <i class="fas fa-history"></i> Cargar Última Evaluación
+    </button>
+    <button class="btn volver" onclick="verHistorialPaciente()">
+      <i class="fas fa-folder-open"></i> Ver Historial del Paciente
+    </button>
+    <button class="btn volver" onclick="mostrarTablaHistorial()">
+  <i class="fas fa-table"></i> Ver Panel de Historial
+</button>
+<div id="tablaHistorial" style="margin-top: 20px;"></div>
+
+
+    <div class="input-group">
+      <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+      <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+    </div>
+
+    <div class="input-group">
+      <label for="documento"><i class="fas fa-id-card"></i> Número de Documento</label>
+      <input type="text" id="documento" placeholder="Ej: 1234567890" required>
+    </div>
+
+    <div class="input-group">
+      <label><i class="fas fa-question-circle"></i> ¿Has dormido bien últimamente?</label>
+      <select id="preg1">
+        <option value="0">Sí</option>
+        <option value="1">No</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label><i class="fas fa-heartbeat"></i> ¿Has sentido ansiedad en los últimos días?</label>
+      <select id="preg2">
+        <option value="0">No</option>
+        <option value="1">Leve</option>
+        <option value="2">Frecuente</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="descripcion"><i class="fas fa-comment-dots"></i> ¿Cómo te sientes hoy?</label>
+      <textarea id="descripcion" rows="5" placeholder="Describe tus síntomas o emociones..."></textarea>
+    </div>
+
+    <button class="btn-evaluate" onclick="evaluar()">
+      <i class="fas fa-chart-bar"></i> Evaluar y Generar Informe
+    </button>
+
+    <div id="resultado" class="result-container"></div>
+
+    <a href="index.html" class="btn volver">
+      <i class="fas fa-arrow-left"></i> Volver al Inicio
+    </a>
   </div>
-
-  <h2>📋 Evaluación de Bienestar</h2>
-
-  <button class="btn volver" onclick="cargarUltimaEvaluacion()">
-    <i class="fas fa-history"></i> Cargar Evaluación Anterior
-  </button>
-
-  <div class="input-group">
-    <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
-    <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
-  </div>
-
-  <div class="input-group">
-    <label for="codigo"><i class="fas fa-lock"></i> Código Personal</label>
-    <input type="text" id="codigo" placeholder="Ej: ABC123" required>
-  </div>
-
-  <div class="input-group">
-    <label for="descripcion"><i class="fas fa-comment-dots"></i> ¿Cómo te sientes hoy?</label>
-    <textarea id="descripcion" rows="5" placeholder="Describe tus síntomas, emociones..."></textarea>
-  </div>
-
-  <button class="btn-evaluate" onclick="evaluar()">
-    <i class="fas fa-chart-bar"></i> Evaluar y Generar Informe
-  </button>
-
-  <div id="resultado" class="result-container"></div>
-
-  <a href="index.html" class="btn volver">
-    <i class="fas fa-arrow-left"></i> Volver al Inicio
-  </a>
-</div>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
+

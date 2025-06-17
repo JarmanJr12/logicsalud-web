@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LOGICSALUD – Bienestar Emocional y Físico</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3870/3870822.png">
   <meta name="description" content="Evaluación inteligente de bienestar emocional y físico">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="inicio">
+  <audio id="ding-audio" src="https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3" preload="auto"></audio>
+
   <div class="container animate__animated animate__fadeIn">
     <div class="logo">
       <span class="icon">🧠</span>
@@ -18,20 +20,28 @@
     </div>
     <p class="subtitle">Herramienta inteligente para evaluar tu bienestar emocional y físico.</p>
     <a href="evaluacion.html" class="btn pulse">Comenzar Evaluación Gratuita</a>
+    <button onclick="toggleDarkMode()" class="btn" style="position:absolute; top: 20px; right: 90px;" title="Modo oscuro">🌙</button>
+    <button id="vozToggle" onclick="toggleVozDala()" class="btn" style="position:absolute; top: 20px; right: 20px;" title="Activar/Desactivar voz">
+      <i id="iconoVoz" class="fas fa-volume-up"></i>
+    </button>
   </div>
 
-  <!-- Chatbot Flotante -->
+  <div id="welcome-bubble" class="animate__animated animate__fadeInUp">
+    👩‍⚕️ Hola, soy <strong>Dala</strong>. ¿Necesitas ayuda?
+  </div>
+
   <div class="chatbot-icon" onclick="toggleChat()">💬</div>
   <div class="chatbot-container" id="chatbot">
     <div class="chatbot-header">
-      <h3>Asistente LOGICSALUD</h3>
+      <h3>Doctora Dala</h3>
       <span onclick="toggleChat()">✕</span>
     </div>
     <div class="chatbot-messages" id="chat-messages">
       <div class="message-container bot">
+        <img src="https://cdn-icons-png.flaticon.com/512/3870/3870822.png" alt="Dala" class="avatar-dala">
         <div class="bot-msg">
-          <div class="msg-content">¡Hola! 👋 Soy el asistente de LOGICSALUD. ¿En qué puedo ayudarte hoy?</div>
-          <div class="msg-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+          <div class="msg-content">¡Hola! 👋 Soy <strong>Dala</strong>, tu doctora virtual. ¿En qué puedo ayudarte hoy?</div>
+          <div class="msg-time" id="horaInicioChat"></div>
         </div>
       </div>
     </div>
@@ -41,18 +51,33 @@
     </div>
   </div>
 
+  <a href="https://wa.me/573001112233" class="whatsapp-float" target="_blank" title="Chatea con Dala por WhatsApp">
+    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" style="width: 50px;">
+  </a>
+
   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const ahora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById("horaInicioChat").textContent = ahora;
+    });
+
     function toggleChat() {
       const chatbot = document.getElementById("chatbot");
+      const bubble = document.getElementById("welcome-bubble");
       chatbot.classList.toggle("active");
+      if (bubble) bubble.style.display = "none";
+
+      if (chatbot.classList.contains("active")) {
+        document.getElementById("ding-audio").play();
+      }
     }
 
     const respuestasMock = {
-      "hola": "¡Hola! Soy el asistente de LOGICSALUD. ¿En qué puedo ayudarte hoy?",
-      "qué es logicsalud": "LOGICSALUD es una herramienta inteligente que evalúa tu bienestar emocional y físico mediante un análisis de tus síntomas y emociones.",
-      "cómo me siento": "Para evaluar cómo te sientes, puedes ir a la sección de evaluación y describir tus síntomas. ¡Estaré aquí para ayudarte a interpretar los resultados!",
-      "gracias": "¡De nada! Recuerda que cuidar de tu salud mental es tan importante como cuidar de tu salud física.",
-      "adiós": "¡Hasta luego! No dudes en volver si necesitas ayuda con tu bienestar."
+      "hola": "¡Hola! Soy Dala, tu doctora virtual. ¿En qué puedo ayudarte hoy?",
+      "qué es logicsalud": "LOGICSALUD es una herramienta que analiza tus síntomas y emociones para darte un informe sobre tu bienestar.",
+      "cómo me siento": "Puedes ir a la sección de evaluación, escribir cómo te sientes, y yo te ayudaré a interpretarlo.",
+      "gracias": "¡Con gusto! Estoy aquí para ayudarte cuando lo necesites.",
+      "adiós": "¡Hasta pronto! Cuídate mucho 💙"
     };
 
     function sendMessage() {
@@ -61,7 +86,6 @@
 
       if (!userInput) return;
 
-      // Mostrar mensaje del usuario
       chatMessages.innerHTML += `
         <div class="message-container user">
           <div class="user-msg">
@@ -70,48 +94,59 @@
           </div>
         </div>
       `;
-      
       document.getElementById("user-input").value = "";
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
-      // Simular "escribiendo..."
       const typingIndicator = document.createElement("div");
       typingIndicator.className = "typing-indicator";
       typingIndicator.innerHTML = `
         <div class="typing-dots">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </div>
       `;
       chatMessages.appendChild(typingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
-      // Respuesta después de un breve retraso
       setTimeout(() => {
         chatMessages.removeChild(typingIndicator);
-        
-        const respuesta = respuestasMock[userInput.toLowerCase()] || 
-          "Entiendo que buscas ayuda. LOGICSALUD puede evaluar cómo te sientes. ¿Quieres comenzar una evaluación o necesitas otro tipo de ayuda?";
-        
+
+        const respuesta = respuestasMock[userInput.toLowerCase()] ||
+          "Soy Dala, tu doctora virtual. Puedes comenzar una evaluación o preguntarme algo sobre tu bienestar.";
+
         chatMessages.innerHTML += `
           <div class="message-container bot">
+            <img src="https://cdn-icons-png.flaticon.com/512/3870/3870822.png" alt="Dala" class="avatar-dala">
             <div class="bot-msg">
               <div class="msg-content">${respuesta}</div>
               <div class="msg-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
             </div>
           </div>
         `;
+
+        hablarDala(respuesta);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }, 1000 + Math.random() * 1000);
     }
 
-    // Permitir enviar mensaje con Enter
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("modoOscuro", document.body.classList.contains("dark-mode"));
+    }
+
+    window.onload = function() {
+      if (localStorage.getItem("modoOscuro") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+    };
+
     document.getElementById("user-input").addEventListener("keypress", function(e) {
       if (e.key === "Enter") {
         sendMessage();
       }
     });
   </script>
+
+  <!-- Importar script externo con la voz de Dala -->
+  <script src="script.js"></script>
 </body>
 </html>
